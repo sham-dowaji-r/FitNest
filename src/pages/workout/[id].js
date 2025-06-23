@@ -32,12 +32,18 @@ export default function WorkoutDetail({ workout }) {
 
 export async function getServerSideProps(context) {
   const { id } = context.params;
+  const name = decodeURIComponent(id);
   await dbConnect();
 
-  const workout = await Workout.findById(id)
+  const workout = await Workout.findOne({ name }) // ابحث بالاسم
     .populate("exercises.exerciseId")
     .lean();
 
+  if (!workout) {
+    return {
+      notFound: true,
+    };
+  }
   const serialized = {
     ...workout,
     _id: workout._id.toString(),
