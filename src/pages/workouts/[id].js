@@ -1,8 +1,11 @@
-import dbConnect from "../../../lib/mongodb";
-import Workout from "../../../models/Workout";
+import dbConnect from "@/lib/mongodb";
+import Workout from "@/models/Workout";
+
 import Exercise from "../../../models/Exercise";
 import ExerciseList from "../../../components/ExerciseList/ExerciseList";
 import styled from "styled-components";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Container = styled.main`
   padding: 2rem;
@@ -16,6 +19,9 @@ const Title = styled.h1`
 `;
 
 export default function WorkoutDetail({ workout }) {
+  const router = useRouter();
+  const workoutId = router.query.id;
+
   const exercisesWithSets = workout.exercises.map((ex) => ({
     ...ex.exerciseId,
     sets: ex.sets,
@@ -26,16 +32,23 @@ export default function WorkoutDetail({ workout }) {
     <Container>
       <Title>{workout.name}</Title>
       <ExerciseList exercises={exercisesWithSets} />
+      <div style={{ margin: "1rem 0" }}>
+        <Link
+          href={`/exercises/create?workoutId=${workout._id}&workoutSlug=${workout.slug}`}
+        >
+          <button>➕ Add Exercise</button>
+        </Link>
+      </div>
     </Container>
   );
 }
 
 export async function getServerSideProps(context) {
-  const { id } = context.params;
-  const name = decodeURIComponent(id);
+  const id = context.params.id; // ✅ عرّف id أولًا
+
   await dbConnect();
 
-  const workout = await Workout.findOne({ name }) // ابحث بالاسم
+  const workout = await Workout.findById(id)
     .populate("exercises.exerciseId")
     .lean();
 
@@ -44,6 +57,7 @@ export async function getServerSideProps(context) {
       notFound: true,
     };
   }
+
   const serialized = {
     ...workout,
     _id: workout._id.toString(),
