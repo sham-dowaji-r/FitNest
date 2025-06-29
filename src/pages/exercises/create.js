@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import ExerciseForm from "../../../components/ExerciseForm/ExerciseForm";
+import ExerciseForm from "components/ExerciseForm/ExerciseForm";
 
 export default function CreateExercise({ muscleOptions }) {
   const router = useRouter();
