@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import mongoose from "mongoose";
 import WorkoutList from "../../components/WorkoutList/WorkoutList";
-import dbConnect from "../../lib/mongodb";
-import Workout from "../../models/Workout";
+import dbConnect from "@/lib/mongodb";
+import Workout from "@/models/Workout";
+
 import Exercise from "../../models/Exercise";
 
 const Container = styled.main`

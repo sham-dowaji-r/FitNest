@@ -1,5 +1,6 @@
-import dbConnect from "../../../lib/mongodb";
-import Workout from "../../../models/Workout";
+import dbConnect from "@/lib/mongodb";
+import Workout from "@/models/Workout";
+
 import Exercise from "../../../models/Exercise";
 import ExerciseList from "../../../components/ExerciseList/ExerciseList";
 import styled from "styled-components";
