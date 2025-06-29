@@ -80,21 +80,21 @@ export default function ExerciseForm({
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Label>اسم التمرين:</Label>
+      <Label>Exercise name:</Label>
       <Input value={name} onChange={(e) => setName(e.target.value)} required />
 
-      <Label>رابط الصورة:</Label>
+      <Label>Image</Label>
       <Input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
 
-      <Label>التعليمات:</Label>
+      <Label>Instructions</Label>
       <TextArea
         rows={5}
         value={instructions}
         onChange={(e) => setInstructions(e.target.value)}
-        placeholder="اكتب كل خطوة في سطر"
+        placeholder=" e.x: Sit on the floor"
       />
 
-      <Label>المجموعات العضلية:</Label>
+      <Label>Muscle groups:</Label>
       <Select
         isMulti
         options={muscleOptions.map((m) => ({
@@ -109,7 +109,7 @@ export default function ExerciseForm({
         }}
       />
 
-      <Button type="submit">حفظ</Button>
+      <Button type="submit">Save</Button>
     </Form>
   );
 }
