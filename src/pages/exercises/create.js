@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 import ExerciseForm from "components/ExerciseForm/ExerciseForm";
+import dbConnect from "@/lib/mongodb";
+import MuscleGroup from "@/models/MuscleGroup";
 
 export default function CreateExercise({ muscleOptions }) {
   const router = useRouter();
@@ -33,20 +35,14 @@ export default function CreateExercise({ muscleOptions }) {
   return <ExerciseForm onSubmit={handleSubmit} muscleOptions={muscleOptions} />;
 }
 
-export async function getServerSideProps(context) {
-  const protocol = context.req.headers["x-forwarded-proto"] || "http";
-  const host = context.req.headers.host;
-  const baseUrl = `${protocol}://${host}`;
-
-  const res = await fetch(`${baseUrl}/api/muscle-groups`);
-  const contentType = res.headers.get("content-type");
-
-  if (!res.ok || !contentType.includes("application/json")) {
-    console.error("Invalid response:", await res.text());
-    return { props: { muscleOptions: [] } };
-  }
-
-  const muscleOptions = await res.json();
+export async function getServerSideProps() {
+  // اتصل بقاعدة البيانات مباشرة
+  await dbConnect();
+  const muscles = await MuscleGroup.find().lean();
+  const muscleOptions = muscles.map((m) => ({
+    _id: m._id.toString(),
+    name: m.name,
+  }));
 
   return {
     props: {
